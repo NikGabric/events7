@@ -9,10 +9,10 @@ import {
   Put,
 } from '@nestjs/common';
 import { EventService } from './event.service';
-import { Event } from 'src/model/event.entity';
+import { Event } from '../model/event.entity';
 import { EventDto } from './dtos/event.dto';
 import { EventInfoDto } from './dtos/event-info.dto';
-import { MessageDto } from 'src/common/dtos/message.dto';
+import { MessageDto } from '../common/dtos/message.dto';
 import { EventEditDto } from './dtos/event-edit.dto';
 
 @Controller('event')

@@ -1,4 +1,4 @@
-import { Event, EventType } from 'src/model/event.entity';
+import { Event, EventType } from '../../model/event.entity';
 
 export class EventInfoDto {
   constructor(event: Event) {

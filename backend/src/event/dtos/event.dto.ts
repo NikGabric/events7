@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsEnum, IsNumber, IsString, Max, Min } from 'class-validator';
-import { EventType } from 'src/model/event.entity';
+import { EventType } from '../../model/event.entity';
 
 export class EventDto {
   @IsString()
