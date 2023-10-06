@@ -1,3 +1,4 @@
+import { Max, Min } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum EventType {
@@ -25,5 +26,7 @@ export class Event {
   type: EventType;
 
   @Column()
+  @Min(0)
+  @Max(10)
   priority: number;
 }
