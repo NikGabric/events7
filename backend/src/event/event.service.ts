@@ -5,6 +5,7 @@ import { Event } from 'src/model/event.entity';
 import { EventDto } from './dtos/event.dto';
 import { EventInfoDto } from './dtos/event-info.dto';
 import { MessageDto } from 'src/common/dtos/message.dto';
+import { EventEditDto } from './dtos/event-edit.dto';
 
 @Injectable()
 export class EventService {
@@ -25,8 +26,18 @@ export class EventService {
   async deleteEvent(id: number): Promise<MessageDto> {
     console.log(id);
     const res = await this.eventRepository.delete(id);
-    if (res.affected !== 0) {
-      return new MessageDto('Event deleted successfully');
-    } else throw new NotFoundException();
+    if (res.affected !== 0) return new MessageDto('Event deleted successfully');
+    else throw new NotFoundException();
+  }
+
+  async putEvent(id: number, eventDto: EventEditDto): Promise<MessageDto> {
+    const res = await this.eventRepository
+      .createQueryBuilder()
+      .select()
+      .update('event', { ...eventDto })
+      .where('id = :id', { id })
+      .execute();
+    if (res.affected !== 0) return new MessageDto('Event edited successfully');
+    else throw new NotFoundException();
   }
 }

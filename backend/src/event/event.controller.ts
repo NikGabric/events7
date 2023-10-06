@@ -3,15 +3,17 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   ParseIntPipe,
   Post,
-  Query,
+  Put,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { Event } from 'src/model/event.entity';
 import { EventDto } from './dtos/event.dto';
 import { EventInfoDto } from './dtos/event-info.dto';
 import { MessageDto } from 'src/common/dtos/message.dto';
+import { EventEditDto } from './dtos/event-edit.dto';
 
 @Controller('event')
 export class EventController {
@@ -27,11 +29,19 @@ export class EventController {
     return this.eventService.postEvent(eventDto);
   }
 
-  @Delete()
+  @Delete('/:id')
   deleteEvent(
-    @Query('id', new ParseIntPipe()) id: number,
+    @Param('id', new ParseIntPipe()) id: number,
   ): Promise<MessageDto> {
     console.log(id);
     return this.eventService.deleteEvent(id);
+  }
+
+  @Put('/:id')
+  putEvent(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() eventDto: EventEditDto,
+  ): Promise<MessageDto> {
+    return this.eventService.putEvent(id, eventDto);
   }
 }
