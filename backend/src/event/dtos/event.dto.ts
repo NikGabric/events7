@@ -8,7 +8,7 @@ export class EventDto {
   name: string;
 
   @IsString()
-  @Length(3, 80)
+  @Length(3, 240)
   description: string;
 
   @IsEnum(EventType)

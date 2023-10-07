@@ -5,6 +5,12 @@ import { NextFunction, Request, Response } from 'express';
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
+    const { type } = req.body;
+    if (type != 'ads') {
+      delete req.body.countryCode;
+      next();
+      return;
+    }
     try {
       const response = await axios.get(
         'https://us-central1-o7tools.cloudfunctions.net/fun7-ad-partner',

@@ -18,7 +18,7 @@ export class Event {
   name: string;
 
   @Column({ nullable: false })
-  @Length(3, 80)
+  @Length(3, 240)
   description: string;
 
   @Column({
