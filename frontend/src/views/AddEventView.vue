@@ -2,9 +2,13 @@
 import { type Ref, ref } from 'vue';
 import { EventDto, EventType } from '../common/event';
 import { post } from '../common/api';
+import { useToastStore } from '../stores/toast';
+import { useRouter } from 'vue-router';
 
 const typeKeys = [EventType.ADS, EventType.APP, EventType.CROSSPROMO, EventType.LIVEOPS];
 
+const router = useRouter();
+const { showToast } = useToastStore();
 const event: Ref<EventDto> = ref({
   name: '',
   description: '',
@@ -15,8 +19,11 @@ const submitted: Ref<boolean> = ref(false);
 
 const postEvent = async () => {
   submitted.value = true;
-  if (validateFields()) await post('/event', event.value);
-  else return;
+  if (validateFields()) {
+    post('/event', event.value)
+      .then((res) => showToast('Success adding a new event.', ''))
+      .finally(() => router.push('/'));
+  } else return;
 };
 
 const validateFields = (): boolean => {

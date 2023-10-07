@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import { useEventStore } from './stores/event';
+import { useToastStore } from './stores/toast';
+import { storeToRefs } from 'pinia';
 
 const { fetchEvents } = useEventStore();
-
 fetchEvents();
+
+const { visible, message, type } = storeToRefs(useToastStore());
 </script>
 
 <template>
@@ -43,6 +46,14 @@ fetchEvents();
           <component :is="Component" />
         </transition>
       </router-view>
+
+      <div class="toast" v-if="visible">
+        <div class="alert alert-success">
+          <span
+            ><span>{{ type }}: </span>{{ message }}</span
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>

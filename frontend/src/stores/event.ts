@@ -13,6 +13,7 @@ export const useEventStore = defineStore('event', () => {
 
   const fetchEvents = async () => {
     events.value = await get('/event/all');
+    events.value.sort((el1: Event, el2: Event) => el1.id - el2.id);
   };
 
   return { events, getEvents, getEventById, fetchEvents };

@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useEventStore } from '../stores/event';
 import { Event, EditEventDto, EventType } from '../common/event';
 import { ComputedRef, Ref, computed, ref, watchEffect } from 'vue';
 import { put } from '../common/api';
+import { useToastStore } from '../stores/toast';
 
 const typeKeys = [EventType.ADS, EventType.APP, EventType.CROSSPROMO, EventType.LIVEOPS];
 
 const route = useRoute();
 const eventId: number = parseInt(route.params.id as string);
-const submitted: Ref<boolean> = ref(false);
+const router = useRouter();
 
+const { showToast } = useToastStore();
 const { getEventById } = useEventStore();
 const event: ComputedRef<Event> = computed(() => getEventById(eventId));
 const eventEdited: Ref<EditEventDto> = ref({});
+const submitted: Ref<boolean> = ref(false);
 
 watchEffect(() => {
   if (event.value) {
@@ -24,10 +27,18 @@ watchEffect(() => {
   }
 });
 
+const handleDeleteEvent = () => {
+  //TODO
+  showToast('Test', 'success');
+};
+
 const editEvent = async () => {
   submitted.value = true;
-  if (validateFields()) await put(`/event/${eventId}`, eventEdited.value);
-  else return;
+  if (validateFields()) {
+    put(`/event/${eventId}`, eventEdited.value)
+      .then(() => showToast('Edit successfully.', ''))
+      .finally(() => router.push('/'));
+  } else return;
 };
 
 const validateFields = (): boolean => {
@@ -93,7 +104,10 @@ const validateFields = (): boolean => {
         </div>
       </div>
 
-      <button class="btn btn-neutral" @click="editEvent">Submit event</button>
+      <div class="flex gap-2">
+        <button class="btn btn-warning" @click="handleDeleteEvent">Delete event</button>
+        <button class="btn btn-neutral" @click="editEvent">Submit event</button>
+      </div>
     </div>
   </div>
 </template>
