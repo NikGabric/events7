@@ -1,4 +1,4 @@
-import { Max, Min } from 'class-validator';
+import { Length, Max, Min } from 'class-validator';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 export enum EventType {
@@ -13,19 +13,22 @@ export class Event {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: false })
+  @Length(3, 20)
   name: string;
 
-  @Column()
+  @Column({ nullable: false })
+  @Length(3, 80)
   description: string;
 
   @Column({
     type: 'enum',
     enum: EventType,
+    nullable: false,
   })
   type: EventType;
 
-  @Column()
+  @Column({ nullable: false })
   @Min(0)
   @Max(10)
   priority: number;
