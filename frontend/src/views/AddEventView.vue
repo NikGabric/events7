@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type Ref, ref } from 'vue';
-import { EventDto, EventType } from '../common/event';
+import { type EventDto, EventType } from '../common/event';
 import { post } from '../common/api';
 import { useToastStore } from '../stores/toast';
 import { useRouter } from 'vue-router';

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 import { useEventStore } from '../stores/event';
-import { Event, EditEventDto, EventType } from '../common/event';
-import { ComputedRef, Ref, computed, ref, watchEffect } from 'vue';
+import { type Event, type EditEventDto, EventType } from '../common/event';
+import { type ComputedRef, type Ref, computed, ref, watchEffect } from 'vue';
 import { del, put } from '../common/api';
 import { useToastStore } from '../stores/toast';
 
@@ -14,7 +14,7 @@ const router = useRouter();
 
 const { showToast } = useToastStore();
 const { getEventById } = useEventStore();
-const event: ComputedRef<Event> = computed(() => getEventById(eventId));
+const event: ComputedRef<Event | undefined> = computed(() => getEventById(eventId));
 const eventEdited: Ref<EditEventDto> = ref({});
 const submitted: Ref<boolean> = ref(false);
 
