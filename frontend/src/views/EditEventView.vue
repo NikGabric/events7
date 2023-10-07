@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useEventStore } from '../stores/event';
 import { Event, EditEventDto, EventType } from '../common/event';
 import { ComputedRef, Ref, computed, ref, watchEffect } from 'vue';
-import { put } from '../common/api';
+import { del, put } from '../common/api';
 import { useToastStore } from '../stores/toast';
 
 const typeKeys = [EventType.ADS, EventType.APP, EventType.CROSSPROMO, EventType.LIVEOPS];
@@ -27,9 +27,10 @@ watchEffect(() => {
   }
 });
 
-const handleDeleteEvent = () => {
-  //TODO
-  showToast('Test', 'success');
+const handleDeleteEvent = async () => {
+  del(`/event/${eventId}`)
+    .then(() => showToast('Successfully deleted event.', ''))
+    .finally(() => router.push('/'));
 };
 
 const editEvent = async () => {

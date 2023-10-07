@@ -21,7 +21,7 @@ const postEvent = async () => {
   submitted.value = true;
   if (validateFields()) {
     post('/event', event.value)
-      .then((res) => showToast('Success adding a new event.', ''))
+      .then(() => showToast('Success adding a new event.', ''))
       .finally(() => router.push('/'));
   } else return;
 };
