@@ -21,8 +21,13 @@ const postEvent = async () => {
   submitted.value = true;
   if (validateFields()) {
     post('/event', event.value)
-      .then(() => showToast('Success adding a new event.', ''))
-      .finally(() => router.push('/'));
+      .then(() => {
+        showToast('Success adding a new event.', 'success');
+        router.push('/');
+      })
+      .catch((err: any) => {
+        showToast(err.message, 'error');
+      });
   } else return;
 };
 

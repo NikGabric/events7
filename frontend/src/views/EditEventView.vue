@@ -29,16 +29,22 @@ watchEffect(() => {
 
 const handleDeleteEvent = async () => {
   del(`/event/${eventId}`)
-    .then(() => showToast('Successfully deleted event.', ''))
-    .finally(() => router.push('/'));
+    .then(() => {
+      showToast('Successfully deleted event.', 'success');
+      router.push('/');
+    })
+    .catch((err: any) => showToast(err.message, 'error'));
 };
 
 const editEvent = async () => {
   submitted.value = true;
   if (validateFields()) {
     put(`/event/${eventId}`, eventEdited.value)
-      .then(() => showToast('Edit successfully.', ''))
-      .finally(() => router.push('/'));
+      .then(() => {
+        showToast('Edit successful.', 'success');
+        router.push('/');
+      })
+      .catch((err: any) => showToast(err.message, 'error'));
   } else return;
 };
 

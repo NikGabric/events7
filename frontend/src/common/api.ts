@@ -33,7 +33,8 @@ export const del = async (path: string): Promise<any> => {
 
 export const put = async (path: string, body: any): Promise<any> => {
   try {
-    const res = await axios.put(`${API_URL}${path}`, body);
+    const countryCode = await getCountryCode();
+    const res = await axios.put(`${API_URL}${path}`, { ...body, countryCode });
     return res.data;
   } catch (err: any) {
     throw err.response.data;

@@ -48,10 +48,8 @@ const { visible, message, type } = storeToRefs(useToastStore());
       </router-view>
 
       <div class="toast" v-if="visible">
-        <div class="alert alert-success">
-          <span
-            ><span>{{ type }}: </span>{{ message }}</span
-          >
+        <div class="alert" :class="`alert-${type}`">
+          <span>{{ message }}</span>
         </div>
       </div>
     </div>
