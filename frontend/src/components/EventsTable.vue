@@ -2,13 +2,15 @@
 import { useRouter } from 'vue-router';
 import { type Event } from '../common/event';
 
-const props = defineProps<{
-  events: Event[];
-}>();
+defineProps({
+  events: {
+    type: Array as () => Event[],
+    required: true
+  }
+});
 const router = useRouter();
 
-const keys = Object.keys(props.events[0]);
-
+const keys: string[] = ['ID', 'Name', 'Description', 'Type', 'Priority'];
 const navigate = (path: string) => {
   router.push(path);
 };
@@ -16,25 +18,40 @@ const navigate = (path: string) => {
 
 <template>
   <div
-    class="overflow-x-auto overflow-y-scroll outline px-4 outline-accent rounded-xl"
-    style="max-height: 40rem"
+    class="overflow-x-auto overflow-y-scroll outline px-4 py-2 outline-accent rounded-xl w-full"
+    style="max-height: 40rem; min-height: 8rem"
   >
-    <table class="table table-pin-rows">
+    <div v-if="!events">Test</div>
+    <table v-else class="table table-pin-rows">
       <thead>
         <tr>
-          <th v-for="key in keys" :key="key" class="capitalize">{{ key }}</th>
+          <th v-for="key in keys" :key="key" class="capitalize">
+            {{ key }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          class="hover hover:cursor-pointer"
+          class="hover hover:cursor-pointer transition-colors"
+          v-if="events.length === 0"
+          @click="navigate('/add-event')"
+        >
+          <td colspan="5">No Events added yet! Click to add an event.</td>
+        </tr>
+        <tr
+          class="hover hover:cursor-pointer transition-colors"
+          v-else
           v-for="event in events"
           :key="event.id"
           @click="navigate(`/edit-event/${event.id}`)"
         >
           <th>{{ event.id }}</th>
           <td>{{ event.name }}</td>
-          <td>{{ event.description }}</td>
+          <td class="description-cell">
+            <div class="description-content">
+              {{ event.description }}
+            </div>
+          </td>
           <td class="capitalize">{{ event.type }}</td>
           <td>{{ event.priority }}</td>
         </tr>
@@ -43,4 +60,17 @@ const navigate = (path: string) => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.description-cell {
+  max-height: 44px; /* Set your desired maximum height here */
+  overflow: hidden;
+}
+
+.description-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* Set the number of maximum lines to display */
+  -webkit-box-orient: vertical;
+}
+</style>

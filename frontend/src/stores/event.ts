@@ -4,6 +4,7 @@ import { get } from '../common/api';
 import { type Event } from '../common/event';
 
 export const useEventStore = defineStore('event', () => {
+  const loading: Ref<boolean> = ref(false);
   const events: Ref<Event[]> = ref([]);
 
   const getEvents: ComputedRef<Event[]> = computed(() => events.value);
@@ -12,9 +13,11 @@ export const useEventStore = defineStore('event', () => {
   );
 
   const fetchEvents = async () => {
+    loading.value = true;
     events.value = await get('/event/all');
     events.value.sort((el1: Event, el2: Event) => el1.id - el2.id);
+    loading.value = false;
   };
 
-  return { events, getEvents, getEventById, fetchEvents };
+  return { events, loading, getEvents, getEventById, fetchEvents };
 });

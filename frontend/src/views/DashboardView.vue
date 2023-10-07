@@ -3,7 +3,7 @@ import { useEventStore } from '../stores/event';
 import { storeToRefs } from 'pinia';
 import EventsTable from '../components/EventsTable.vue';
 
-const { events } = storeToRefs(useEventStore());
+const { events, loading } = storeToRefs(useEventStore());
 const { fetchEvents } = useEventStore();
 fetchEvents();
 </script>
@@ -11,7 +11,7 @@ fetchEvents();
 <template>
   <div class="flex flex-col items-center">
     <h1 class="text-xl text-primary font-semibold mb-4">View all events:</h1>
-    <span v-if="events.length === 0" class="loading loading-ring loading-lg"></span>
+    <span v-if="loading" class="loading loading-ring loading-lg"></span>
     <events-table v-else :events="events" />
   </div>
 </template>
