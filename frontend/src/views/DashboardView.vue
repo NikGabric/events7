@@ -9,7 +9,8 @@ fetchEvents();
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col items-center">
+    <h1 class="text-xl text-primary font-semibold mb-4">View all events:</h1>
     <span v-if="events.length === 0" class="loading loading-ring loading-lg"></span>
     <events-table v-else :events="events" />
   </div>

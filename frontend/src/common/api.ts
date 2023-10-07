@@ -22,16 +22,16 @@ export const post = async (path: string, body: any): Promise<any> => {
 
 export const del = async (path: string): Promise<any> => {
   try {
-    const res = await axios.get(`${API_URL}${path}`);
+    const res = await axios.delete(`${API_URL}${path}`);
     return res.data;
   } catch (err: any) {
     throw err.response.data;
   }
 };
 
-export const put = async (path: string): Promise<any> => {
+export const put = async (path: string, body: any): Promise<any> => {
   try {
-    const res = await axios.get(`${API_URL}${path}`);
+    const res = await axios.put(`${API_URL}${path}`, body);
     return res.data;
   } catch (err: any) {
     throw err.response.data;

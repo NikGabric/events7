@@ -38,7 +38,7 @@ fetchEvents();
           </ul>
         </div>
       </div>
-      <router-view v-slot="{ Component }">
+      <router-view v-slot="{ Component }" class="px-40 pt-8">
         <transition name="scale" mode="out-in">
           <component :is="Component" />
         </transition>

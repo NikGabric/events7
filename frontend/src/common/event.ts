@@ -19,3 +19,10 @@ export interface EventDto {
   type: EventType | null;
   priority: number;
 }
+
+export interface EditEventDto {
+  name?: string;
+  description?: string;
+  type?: EventType | null;
+  priority?: number;
+}

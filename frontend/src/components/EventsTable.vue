@@ -15,7 +15,10 @@ const navigate = (path: string) => {
 </script>
 
 <template>
-  <div class="overflow-x-auto overflow-y-scroll max-h-96">
+  <div
+    class="overflow-x-auto overflow-y-scroll outline px-4 outline-accent rounded-xl"
+    style="max-height: 40rem"
+  >
     <table class="table table-pin-rows">
       <thead>
         <tr>
