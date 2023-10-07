@@ -4,6 +4,8 @@ import { storeToRefs } from 'pinia';
 import EventsTable from '../components/EventsTable.vue';
 
 const { events } = storeToRefs(useEventStore());
+const { fetchEvents } = useEventStore();
+fetchEvents();
 </script>
 
 <template>

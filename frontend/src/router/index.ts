@@ -13,14 +13,14 @@ const router = createRouter({
       component: DashboardView
     },
     {
+      path: '/edit-event/:id(\\d+)',
+      name: 'Edit event',
+      component: EditEventView
+    },
+    {
       path: '/add-event',
       name: 'Add event',
       component: AddEventView
-    },
-    {
-      path: '/edit-event/:id',
-      name: 'Add event',
-      component: EditEventView
     },
     {
       path: '/:catchAll(.*)',
