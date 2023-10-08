@@ -31,7 +31,10 @@ const postEvent = async () => {
         showToast(err.message, 'error');
       })
       .finally(() => (loading.value = false));
-  } else return;
+  } else {
+    loading.value = false;
+    return;
+  }
 };
 
 const validateFields = (): boolean => {
