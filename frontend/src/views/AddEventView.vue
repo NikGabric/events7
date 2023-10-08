@@ -8,6 +8,7 @@ import { useRouter } from 'vue-router';
 const typeKeys = [EventType.ADS, EventType.APP, EventType.CROSSPROMO, EventType.LIVEOPS];
 
 const router = useRouter();
+const loading: Ref<boolean> = ref(false);
 const { showToast } = useToastStore();
 const event: Ref<EventDto> = ref({
   name: '',
@@ -19,6 +20,7 @@ const submitted: Ref<boolean> = ref(false);
 
 const postEvent = async () => {
   submitted.value = true;
+  loading.value = true;
   if (validateFields()) {
     post('/event', event.value)
       .then(() => {
@@ -27,7 +29,8 @@ const postEvent = async () => {
       })
       .catch((err: any) => {
         showToast(err.message, 'error');
-      });
+      })
+      .finally(() => (loading.value = false));
   } else return;
 };
 
@@ -92,7 +95,8 @@ const validateFields = (): boolean => {
       </div>
     </div>
 
-    <button class="btn btn-neutral" @click="postEvent">Submit event</button>
+    <button class="btn btn-neutral" @click="postEvent" :disabled="loading">Submit event</button>
+    <span v-if="loading" class="loading loading-ring loading-md"></span>
   </div>
 </template>
 

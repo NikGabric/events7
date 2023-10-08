@@ -12,6 +12,7 @@ const route = useRoute();
 const eventId: number = parseInt(route.params.id as string);
 const router = useRouter();
 
+const loading: Ref<boolean> = ref(false);
 const { showToast } = useToastStore();
 const { getEventById } = useEventStore();
 const event: ComputedRef<Event | undefined> = computed(() => getEventById(eventId));
@@ -28,24 +29,31 @@ watchEffect(() => {
 });
 
 const handleDeleteEvent = async () => {
+  loading.value = true;
   del(`/event/${eventId}`)
     .then(() => {
       showToast('Successfully deleted event.', 'success');
       router.push('/');
     })
-    .catch((err: any) => showToast(err.message, 'error'));
+    .catch((err: any) => showToast(err.message, 'error'))
+    .finally(() => (loading.value = false));
 };
 
 const editEvent = async () => {
   submitted.value = true;
+  loading.value = true;
   if (validateFields()) {
     put(`/event/${eventId}`, eventEdited.value)
       .then(() => {
         showToast('Edit successful.', 'success');
         router.push('/');
       })
-      .catch((err: any) => showToast(err.message, 'error'));
-  } else return;
+      .catch((err: any) => showToast(err.message, 'error'))
+      .finally(() => (loading.value = false));
+  } else {
+    loading.value = false;
+    return;
+  }
 };
 
 const validateFields = (): boolean => {
@@ -112,9 +120,12 @@ const validateFields = (): boolean => {
       </div>
 
       <div class="flex gap-2">
-        <button class="btn btn-warning" @click="handleDeleteEvent">Delete event</button>
-        <button class="btn btn-neutral" @click="editEvent">Submit event</button>
+        <button class="btn btn-warning" @click="handleDeleteEvent" :disabled="loading">
+          Delete event
+        </button>
+        <button class="btn btn-neutral" @click="editEvent" :disabled="loading">Submit event</button>
       </div>
+      <span v-if="loading" class="loading loading-ring loading-md"></span>
     </div>
   </div>
 </template>
