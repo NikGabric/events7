@@ -33,7 +33,6 @@ export class EventController {
   deleteEvent(
     @Param('id', new ParseIntPipe()) id: number,
   ): Promise<MessageDto> {
-    console.log(id);
     return this.eventService.deleteEvent(id);
   }
 

@@ -24,7 +24,6 @@ export class EventService {
   }
 
   async deleteEvent(id: number): Promise<MessageDto> {
-    console.log(id);
     const res = await this.eventRepository.delete(id);
     if (res.affected !== 0) return new MessageDto('Event deleted successfully');
     else throw new NotFoundException();
