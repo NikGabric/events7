@@ -3,15 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EventDto } from './dtos/event.dto';
 import { EventInfoDto } from './dtos/event-info.dto';
 import { EventEditDto } from './dtos/event-edit.dto';
-import { EventRepository } from '../model/event.repository';
 import { Event } from '../model/event.entity';
 import { MessageDto } from '../common/dtos/message.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class EventService {
   constructor(
-    @InjectRepository(EventRepository)
-    private readonly eventRepository: EventRepository,
+    @InjectRepository(Event)
+    private readonly eventRepository: Repository<Event>,
   ) {}
 
   async getAllEvents(): Promise<Event[]> {
@@ -30,12 +30,7 @@ export class EventService {
   }
 
   async putEvent(id: number, eventDto: EventEditDto): Promise<MessageDto> {
-    const res = await this.eventRepository
-      .createQueryBuilder()
-      .select()
-      .update('event', { ...eventDto })
-      .where('id = :id', { id })
-      .execute();
+    const res = await this.eventRepository.update({ id }, eventDto);
     if (res.affected !== 0) return new MessageDto('Event edited successfully');
     else throw new NotFoundException();
   }

@@ -1,135 +1,140 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventService } from './event.service';
-import { TypeORMPostgresTestingModule } from '../../test/TypeORMPostgresTestingModule';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { EventRepository } from '../model/event.repository';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { Event, EventType } from '../model/event.entity';
+import { Repository } from 'typeorm';
 import { EventDto } from './dtos/event.dto';
-import { EventInfoDto } from './dtos/event-info.dto';
 import { MessageDto } from '../common/dtos/message.dto';
-import { DeleteResult } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { EventEditDto } from './dtos/event-edit.dto';
 
+const eventArr: Event[] = [
+  {
+    id: 1,
+    name: 'Test Event',
+    description: 'Test Event Desc',
+    type: EventType.APP,
+    priority: 4,
+  },
+  {
+    id: 2,
+    name: 'Test Event 2',
+    description: 'Test Event Desc 2',
+    type: EventType.CROSSPROMO,
+    priority: 10,
+  },
+];
+
+const newEvent: EventDto = {
+  name: 'New Event',
+  description: 'New Event Desc',
+  type: EventType.LIVEOPS,
+  priority: 4,
+};
+
 describe('EventService', () => {
-  let service: EventService;
-  let repository: EventRepository;
+  let eventService: EventService;
+  let eventRepository: Repository<Event>;
+
+  const mockRepository = {
+    find: jest.fn().mockResolvedValue(eventArr),
+    save: jest.fn().mockResolvedValue({ id: 1, ...newEvent }),
+    delete: jest.fn().mockResolvedValue(true),
+    update: jest.fn().mockResolvedValue({ affected: 1 }),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeORMPostgresTestingModule([Event]),
-        TypeOrmModule.forFeature([Event]),
+      providers: [
+        EventService,
+        {
+          provide: getRepositoryToken(Event),
+          useValue: mockRepository,
+        },
       ],
-      providers: [EventService, EventRepository],
     }).compile();
 
-    service = module.get<EventService>(EventService);
-    repository = module.get<EventRepository>(EventRepository);
+    eventService = module.get<EventService>(EventService);
+    eventRepository = module.get<Repository<Event>>(getRepositoryToken(Event));
   });
 
+  beforeEach(() => jest.clearAllMocks());
+
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(eventService).toBeDefined();
   });
 
   describe('getAllEvents', () => {
-    it('should get all events', async () => {
-      const mockEvents: Event[] = [
-        {
-          id: 1,
-          name: 'mock-event1',
-          description: 'mock-description1',
-          type: EventType.ADS,
-          priority: 3,
-        },
-      ];
-      const getAllEventsMock = jest
-        .spyOn(service, 'getAllEvents')
-        .mockResolvedValue(mockEvents);
-      const getEvents = await service.getAllEvents();
-
-      expect(getEvents).toEqual(mockEvents);
-      expect(getAllEventsMock).toHaveBeenCalledTimes(1);
-      getAllEventsMock.mockRestore();
+    it('should return an array of events', async () => {
+      const events = await eventService.getAllEvents();
+      expect(events).toEqual(eventArr);
     });
   });
 
   describe('postEvent', () => {
-    it('should create a new event', async () => {
-      const eventDto: EventDto = {
-        name: 'mock-event1',
-        description: 'mock-description1',
-        type: EventType.ADS,
-        priority: 3,
-      };
-      const savedEvent: Event = {
-        id: 1,
-        ...eventDto,
-      };
-      const expectedEventInfoDto: EventInfoDto = new EventInfoDto(savedEvent);
-
-      const getAllEventsMock = jest
-        .spyOn(repository, 'save')
-        .mockResolvedValue(savedEvent);
-      const res: EventInfoDto = await service.postEvent(eventDto);
-
-      expect(res).toEqual(expectedEventInfoDto);
-
-      getAllEventsMock.mockRestore();
+    it('should successfully insert an event', async () => {
+      const res = await eventService.postEvent(newEvent);
+      expect(res).toEqual({ id: 1, ...newEvent });
+      expect(eventRepository.save).toHaveBeenCalledTimes(1);
+      expect(eventRepository.save).toHaveBeenCalledWith(newEvent);
     });
   });
 
   describe('deleteEvent', () => {
-    it('should delete event with given id and return a success message', async () => {
-      const idToDelete: number = 1;
-
-      jest
-        .spyOn(repository, 'delete')
-        .mockResolvedValue({ affected: 1, raw: {} as DeleteResult['raw'] });
-      const res: MessageDto = await service.deleteEvent(idToDelete);
+    it('should return a successfull delete message', async () => {
+      const res = await eventService.deleteEvent(1);
       expect(res).toEqual(new MessageDto('Event deleted successfully'));
     });
 
-    it('should throw a NotFoundException when event is not found', async () => {
-      const eventIdToDelete = 2;
-
-      jest
-        .spyOn(repository, 'delete')
-        .mockResolvedValue({ affected: 0, raw: {} as DeleteResult['raw'] });
-
-      const res = service.deleteEvent(eventIdToDelete);
-      await expect(res).rejects.toThrowError(NotFoundException);
+    it('should throw a NotFoundException when trying to delete a non-existent event', async () => {
+      const spy = jest
+        .spyOn(eventRepository, 'delete')
+        .mockRejectedValueOnce(new NotFoundException());
+      mockRepository.delete.mockResolvedValueOnce({ affected: 0 });
+      expect(eventService.deleteEvent(99)).rejects.toThrowError(
+        NotFoundException,
+      );
+      expect(spy).toHaveBeenCalledWith(99);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 
-  // describe('putEvent', () => {
-  it('should update an event and return a success message', async () => {
-    const eventDto: EventDto = {
-      name: 'Event Name',
-      description: 'Event description',
-      type: EventType.APP,
-      priority: 2,
-    };
-    const eventIdToUpdate = (await repository.save({ ...eventDto })).id;
+  describe('putEvent', () => {
+    it('should update the event', async () => {
+      const newEvent: EventEditDto = {
+        name: 'Updated Test Event',
+      };
+      const event = await eventService.putEvent(1, newEvent);
+      expect(event).toEqual(new MessageDto('Event edited successfully'));
+      expect(eventRepository.update).toBeCalledTimes(1);
+      expect(eventRepository.update).toBeCalledWith(
+        { id: 1 },
+        { name: 'Updated Test Event' },
+      );
+    });
 
-    const eventEditDto: EventEditDto = {
-      name: 'Edited Event Name',
-    };
+    it('should return throw a not found exception when trying to update a non-existent event', async () => {
+      const spy = jest
+        .spyOn(eventRepository, 'update')
+        .mockRejectedValueOnce(new NotFoundException());
+      mockRepository.update.mockResolvedValueOnce({ affected: 0 });
 
-    jest.spyOn(repository.createQueryBuilder(), 'update').mockReturnThis();
-    jest.spyOn(repository.createQueryBuilder(), 'where').mockReturnThis();
-    jest
-      .spyOn(repository.createQueryBuilder(), 'execute')
-      .mockResolvedValue({ affected: 1 });
-
-    const result: MessageDto = await service.putEvent(
-      eventIdToUpdate,
-      eventEditDto,
-    );
-
-    expect(result).toEqual(new MessageDto('Event edited successfully'));
-
-    await repository.clear();
+      const newEvent: EventEditDto = {
+        name: 'Updated Test Event',
+      };
+      expect(eventService.putEvent(99, newEvent)).rejects.toThrowError(
+        NotFoundException,
+      );
+      expect(eventRepository.update).toHaveBeenCalledTimes(1);
+      expect(eventRepository.update).toHaveBeenCalledWith(
+        { id: 99 },
+        { name: 'Updated Test Event' },
+      );
+      expect(spy).toHaveBeenCalledWith(
+        { id: 99 },
+        { name: 'Updated Test Event' },
+      );
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
   });
-  // });
 });
