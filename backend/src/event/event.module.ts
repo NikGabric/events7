@@ -8,12 +8,11 @@ import { EventController } from './event.controller';
 import { EventService } from './event.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from '../model/event.entity';
-import { EventRepository } from 'src/model/event.repository';
 import { AuthMiddleware } from '../middleware/auth.middleware';
 
 @Module({
   controllers: [EventController],
-  providers: [EventService, EventRepository],
+  providers: [EventService],
   imports: [TypeOrmModule.forFeature([Event])],
 })
 export class EventModule implements NestModule {

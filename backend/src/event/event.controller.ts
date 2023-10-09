@@ -20,24 +20,22 @@ export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   @Get('/all')
-  getEvents(): Promise<Event[]> {
+  getAll(): Promise<Event[]> {
     return this.eventService.getAllEvents();
   }
 
   @Post()
-  postEvent(@Body() eventDto: EventDto): Promise<EventInfoDto> {
+  postOne(@Body() eventDto: EventDto): Promise<EventInfoDto> {
     return this.eventService.postEvent(eventDto);
   }
 
   @Delete('/:id')
-  deleteEvent(
-    @Param('id', new ParseIntPipe()) id: number,
-  ): Promise<MessageDto> {
+  deleteOne(@Param('id', new ParseIntPipe()) id: number): Promise<MessageDto> {
     return this.eventService.deleteEvent(id);
   }
 
   @Put('/:id')
-  putEvent(
+  putOne(
     @Param('id', ParseIntPipe) id: number,
     @Body() eventDto: EventEditDto,
   ): Promise<MessageDto> {
