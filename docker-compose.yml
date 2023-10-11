@@ -36,3 +36,13 @@ services:
       - "3000:3000"
     depends_on:
       - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-vue
+    env_file:
+      - ./frontend/.env.prod
+    ports:
+      - "5173:5173"
