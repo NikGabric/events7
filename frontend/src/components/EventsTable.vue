@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { type Event } from '../common/event';
+import PriorityField from './PriorityField.vue';
 
 defineProps({
   events: {
@@ -18,7 +19,7 @@ const navigate = (path: string) => {
 
 <template>
   <div
-    class="overflow-x-auto overflow-y-scroll outline px-4 py-2 outline-accent rounded-xl w-full"
+    class="overflow-x-auto overflow-y-scroll outline px-4 outline-accent rounded-xl w-full"
     style="height: 40rem"
   >
     <div v-if="!events">Test</div>
@@ -53,7 +54,7 @@ const navigate = (path: string) => {
               </div>
             </td>
             <td class="capitalize">{{ event.type }}</td>
-            <td>{{ event.priority }}</td>
+            <td><PriorityField :value="event.priority" /></td>
           </tr>
         </TransitionGroup>
       </tbody>
