@@ -33,7 +33,9 @@ const { visible, message, type } = storeToRefs(useToastStore());
             </svg>
           </label>
         </div>
-        <div class="flex-1 px-2 mx-2">Event7</div>
+        <div class="flex-1 px-2 mx-2">
+          <router-link to="/">Events7</router-link>
+        </div>
         <div class="flex-none hidden lg:block">
           <ul class="menu menu-horizontal">
             <li class="mr-2"><router-link to="/">View all events</router-link></li>
