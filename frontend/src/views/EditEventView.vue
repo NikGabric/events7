@@ -120,13 +120,26 @@ const validateFields = (): boolean => {
       </div>
 
       <div class="flex gap-2">
-        <button class="btn btn-warning" @click="handleDeleteEvent" :disabled="loading">
+        <button class="btn btn-warning" onclick="my_modal_1.showModal()" :disabled="loading">
           Delete event
         </button>
         <button class="btn btn-neutral" @click="editEvent" :disabled="loading">Submit event</button>
       </div>
       <span v-if="loading" class="loading loading-ring loading-md"></span>
     </div>
+
+    <dialog id="my_modal_1" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">Deleting an event</h3>
+        <p class="py-4">Are you sure you want to delete the event: {{ event.name }}?</p>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">Cancel</button>
+            <button class="btn btn-warning" @click="handleDeleteEvent">Delete</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
   </div>
 </template>
 
