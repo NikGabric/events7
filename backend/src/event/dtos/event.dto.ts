@@ -1,14 +1,25 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsString, Length, Max, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsString,
+  Length,
+  Max,
+  Min,
+  Validate,
+} from 'class-validator';
 import { EventType } from '../../model/event.entity';
+import { NoWhitespaceConstraint } from '../../common/decorators/no-whitespace.decorator';
 
 export class EventDto {
   @IsString()
   @Length(3, 20)
+  @Validate(NoWhitespaceConstraint)
   name: string;
 
   @IsString()
   @Length(3, 240)
+  @Validate(NoWhitespaceConstraint)
   description: string;
 
   @IsEnum(EventType)
