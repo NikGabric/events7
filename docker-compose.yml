@@ -43,6 +43,6 @@ services:
       dockerfile: Dockerfile
     container_name: frontend-vue
     env_file:
-      - ./frontend/.env.prod
+      - ./frontend/.env
     ports:
-      - "5173:5173"
+      - "8080:80"
