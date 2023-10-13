@@ -131,7 +131,7 @@ const validateFields = (): boolean => {
     <dialog id="my_modal_1" class="modal">
       <div class="modal-box">
         <h3 class="font-bold text-lg">Deleting an event</h3>
-        <p class="py-4">Are you sure you want to delete the event: {{ event.name }}?</p>
+        <p class="py-4">Are you sure you want to delete the event: {{ event?.name }}?</p>
         <div class="modal-action">
           <form method="dialog">
             <button class="btn mr-2">Cancel</button>

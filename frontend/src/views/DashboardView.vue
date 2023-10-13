@@ -3,7 +3,7 @@ import { useEventStore } from '../stores/event';
 import { storeToRefs } from 'pinia';
 import EventsTable from '../components/EventsTable.vue';
 import { type ComputedRef, type Ref, computed, ref } from 'vue';
-import { Event, EventType } from '../common/event';
+import { type Event, EventType } from '../common/event';
 
 const { events, loading } = storeToRefs(useEventStore());
 const { fetchEvents } = useEventStore();

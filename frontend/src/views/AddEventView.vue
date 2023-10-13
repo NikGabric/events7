@@ -13,7 +13,7 @@ const { showToast } = useToastStore();
 const event: Ref<EventDto> = ref({
   name: '',
   description: '',
-  type: undefined,
+  type: null,
   priority: 5
 });
 const submitted: Ref<boolean> = ref(false);
@@ -49,7 +49,7 @@ const validateFields = (): boolean => {
 const resetValues = () => {
   event.value.name = '';
   event.value.description = '';
-  event.value.type = undefined;
+  event.value.type = null;
   event.value.priority = 5;
 };
 </script>
