@@ -32,6 +32,9 @@ Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/NikGabric/events7
+```
+
+```bash
 cd ./events7
 ```
 
