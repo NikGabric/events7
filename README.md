@@ -10,19 +10,15 @@
   - [3. Build Docker Images](#3-build-docker-images)
   - [4. Start the Docker Containers](#4-start-the-docker-containers)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Overview
 
-Briefly describe your project and its purpose.
+Events7 is a Fullstack application for defining and editing events we want to track. This is a task for my application to the company Outfit7.
 
 ## Prerequisites
 
-List the software and dependencies required to run the project. Include links for installation if needed.
-
 - [Docker](https://www.docker.com/get-started)
-- [Docker Compose](https://docs.docker.com/compose/install) (if applicable)
+- [Docker Compose](https://docs.docker.com/compose/install)
 
 ## Getting Started
 
@@ -69,3 +65,9 @@ Set the environment variables for the backend and frontend apps:
 ```bash
 docker compose up -d --build
 ```
+
+## Usage
+
+The dashboard app is available at http://localhost:8080
+
+The backend app is awailable at http://localhost:3000
