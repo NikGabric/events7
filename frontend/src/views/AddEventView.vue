@@ -13,7 +13,7 @@ const { showToast } = useToastStore();
 const event: Ref<EventDto> = ref({
   name: '',
   description: '',
-  type: EventType.CROSSPROMO,
+  type: undefined,
   priority: 5
 });
 const submitted: Ref<boolean> = ref(false);
@@ -38,10 +38,17 @@ const postEvent = async () => {
 };
 
 const validateFields = (): boolean => {
-  if (!event.value.name || !event.value.description) {
+  if (!event.value.name || !event.value.description || !event.value.type) {
     return false;
   }
   return true;
+};
+
+const resetValues = () => {
+  event.value.name = '';
+  event.value.description = '';
+  event.value.type = undefined;
+  event.value.priority = 5;
 };
 </script>
 
@@ -73,7 +80,11 @@ const validateFields = (): boolean => {
       <label class="label">
         <span class="label-text">Type:</span>
       </label>
-      <select class="select select-bordered w-full" v-model="event.type">
+      <select
+        class="select select-bordered w-full"
+        :class="{ 'select-error': submitted && !event.type }"
+        v-model="event.type"
+      >
         <option disabled selected>Choose event type</option>
         <option v-for="t in typeKeys" :key="t">
           <span>{{ t }}</span>
@@ -98,7 +109,10 @@ const validateFields = (): boolean => {
       </div>
     </div>
 
-    <button class="btn btn-neutral" @click="postEvent" :disabled="loading">Submit event</button>
+    <div class="flex gap-2">
+      <button class="btn btn-warning" @click="resetValues" :disabled="loading">Reset fields</button>
+      <button class="btn btn-neutral" @click="postEvent" :disabled="loading">Submit event</button>
+    </div>
     <span v-if="loading" class="loading loading-ring loading-md"></span>
   </div>
 </template>
