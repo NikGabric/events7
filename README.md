@@ -1,4 +1,4 @@
-# Project Name
+# Events7 by Nik Gabric
 
 ## Table of Contents
 
