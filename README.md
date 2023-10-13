@@ -1,5 +1,7 @@
 # Events7 by Nik Gabric
 
+This is a monorepo of a fullstack app using Nestjs for the backend and VueJS 3 for the frontend application.
+
 ## Table of Contents
 
 - [Overview](#overview)
