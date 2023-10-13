@@ -38,6 +38,8 @@ const postEvent = async () => {
 };
 
 const validateFields = (): boolean => {
+  event.value.name = event.value.name.trim();
+  event.value.description = event.value.description.trim();
   if (!event.value.name || !event.value.description || !event.value.type) {
     return false;
   }
