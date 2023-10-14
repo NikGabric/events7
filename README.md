@@ -26,7 +26,7 @@ Events7 is a Fullstack application for defining and editing events we want to tr
 
 ## Getting Started
 
-Provide step-by-step instructions to get your project up and running.
+Here are the step-by-step instructions to pull, build and deploy the application with docker.
 
 ### 1. Clone the Repository
 
