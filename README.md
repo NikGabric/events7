@@ -12,15 +12,17 @@ This is a monorepo of a fullstack app using Nestjs for the backend and VueJS 3 f
   - [3. Build Docker Images](#3-build-docker-images)
   - [4. Start the Docker Containers](#4-start-the-docker-containers)
 - [Usage](#usage)
+- [Some Explanations](#some-explanations)
 
 ## Overview
 
-Events7 is a Fullstack application for defining and editing events we want to track. This is a task for my application to the company Outfit7.
+Events7 is a Fullstack application for defining and editing events we want to track. This is my solution to the Fullstack Web Developer Expertise Test by Outfit7.
 
 ## Prerequisites
 
 - [Docker](https://www.docker.com/get-started)
 - [Docker Compose](https://docs.docker.com/compose/install)
+- [Git](https://git-scm.com) (for repo cloning purposes only)
 
 ## Getting Started
 
@@ -76,3 +78,7 @@ docker compose up -d --build
 The dashboard app is available at http://localhost:8080
 
 The backend app is awailable at http://localhost:3000
+
+## Some Explanations
+
+For the Event table in the database, I was contemplating putting a unique constraint to the name field, but ultimately decided to leave it, since to my understanding, there might be some events with the same names. For the Event entity I also added some constraints: String lengths (name between 3 and 20 chars, description between 3 and 240 chars), event type enum, and the id of the event is automatically generated.
